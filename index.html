@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>㳠米鸭 | Taimiyaxeditz</title>
-  <link rel="icon" href="https://yt3.googleusercontent.com/rgW6HKz1xBR3c5UOjbKnb_Nkj1ZROqmoLbI_yrMpoWmgy7hiNSR-0kC2ZxLZN853BjHcWyBhHAk=s160-c-k-c0x00ffffff-no-rj" />
+  <link rel="icon" href="https://yt3.googleusercontent.com/1HgoG2h15gEBQXlIkjzx2UFFTG2Z87ozl1JN_iDjwUwU09DBGMA1CvsWpu0cFG5RANZ5QUxE5A=s160-c-k-c0x00ffffff-no-rj" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -13,25 +13,32 @@
       --light: #e0f7fa;
       --bg: #000;
       --blur: rgba(0, 0, 0, 0.5);
+      --card-bg: #0a0a0a;
     }
     [data-theme="light"] {
       --neon: #ff00ff;
       --light: #222;
       --bg: #fff;
       --blur: rgba(255, 255, 255, 0.4);
+      --card-bg: #f0f0f0;
     }
     * {
       margin: 0; padding: 0; box-sizing: border-box;
     }
-    html, body {
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--light);
       overflow-x: hidden;
+      position: relative;
     }
     #scrollBar {
       position: fixed; top: 0; left: 0; height: 5px;
       background: var(--neon); width: 0%; z-index: 1000;
+      transition: width 0.1s linear;
     }
     section {
       min-height: 100vh;
@@ -41,13 +48,33 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
     .section-title {
-      font-size: 32px;
+      font-size: clamp(28px, 5vw, 42px);
       color: var(--neon);
       font-family: 'Orbitron', sans-serif;
       text-shadow: 0 0 10px var(--neon);
       margin-bottom: 20px;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: var(--neon);
+      box-shadow: 0 0 10px var(--neon);
     }
     .section-content {
       background: var(--blur);
@@ -55,11 +82,15 @@
       border-radius: 20px;
       max-width: 900px;
       box-shadow: 0 0 25px var(--neon);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      width: 100%;
     }
     .buttons a, button, input, textarea {
       font-family: inherit;
       border-radius: 10px;
       border: none;
+      transition: all 0.3s ease;
     }
     .theme-toggle {
       position: fixed;
@@ -71,6 +102,13 @@
       cursor: pointer;
       z-index: 1001;
       border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 0 15px var(--neon);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px var(--neon);
     }
     .skills-list, .timeline, .projects-grid, .buttons, .achievements-list, .leaderboard, .memes {
       display: grid;
@@ -79,18 +117,24 @@
       margin-top: 20px;
     }
     .skill, .timeline-event, .project-card, .achievement, .buttons a, .leaderboard-entry, .meme {
-      background: #0a0a0a;
+      background: var(--card-bg);
       border: 1px solid var(--neon);
-      padding: 15px;
+      padding: 20px 15px;
       border-radius: 12px;
       box-shadow: 0 0 12px var(--neon);
-      transition: transform .3s;
+      transition: transform 0.3s, box-shadow 0.3s;
       color: var(--light);
       text-decoration: none;
       text-align: center;
     }
     .skill:hover, .timeline-event:hover, .project-card:hover, .achievement:hover, .buttons a:hover, .leaderboard-entry:hover, .meme:hover {
       transform: scale(1.05);
+      box-shadow: 0 0 20px var(--neon);
+    }
+    .skill i, .project-card i {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--neon);
     }
     .logo {
       width: 150px;
@@ -100,6 +144,7 @@
       box-shadow: 0 0 15px var(--neon);
       margin-bottom: 20px;
       animation: pulseRotate 6s infinite ease-in-out;
+      object-fit: cover;
     }
     @keyframes pulseRotate {
       0% {
@@ -117,7 +162,10 @@
     }
     .clock {
       font-size: 20px;
-      margin-top: 10px;
+      margin-top: 20px;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--neon);
+      text-shadow: 0 0 5px var(--neon);
     }
     footer {
       background: #0a0a0a;
@@ -146,21 +194,164 @@
       margin: 0 10px;
       font-size: 24px;
       transition: color 0.3s, transform 0.3s;
+      display: inline-block;
     }
     .footer-socials a:hover {
       color: #fff;
       transform: scale(1.2);
     }
+    /* Navigation */
+    .nav-links {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      display: flex;
+      gap: 10px;
+    }
+    .nav-links a {
+      color: var(--light);
+      text-decoration: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      background: var(--blur);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid var(--neon);
+      box-shadow: 0 0 10px var(--neon);
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    .nav-links a:hover {
+      background: var(--neon);
+      color: #000;
+      transform: translateY(-2px);
+    }
+    /* Form styling */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    input, textarea, button {
+      padding: 12px 15px;
+      background: var(--card-bg);
+      border: 1px solid var(--neon);
+      color: var(--light);
+      outline: none;
+    }
+    input:focus, textarea:focus {
+      box-shadow: 0 0 10px var(--neon);
+    }
+    button {
+      cursor: pointer;
+      background: var(--neon);
+      color: #000;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px var(--neon);
+    }
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--neon);
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px var(--neon);
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .back-to-top:hover {
+      transform: translateY(-5px) scale(1.1);
+    }
+    /* Project cards */
+    .project-card h3 {
+      margin-bottom: 10px;
+      color: var(--neon);
+    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .section-content {
+        padding: 30px 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .theme-toggle {
+        top: 15px;
+        right: 15px;
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      .skills-list, .timeline, .projects-grid, .achievements-list, .leaderboard, .memes {
+        grid-template-columns: 1fr;
+      }
+    }
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      background: var(--neon);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+      }
+      50% {
+        transform: translateY(-100px) translateX(100px);
+      }
+      100% {
+        transform: translateY(0) translateX(0);
+      }
+    }
   </style>
 </head>
 <body>
   <div id="scrollBar"></div>
-  <div class="theme-toggle" onclick="toggleTheme()">Toggle Theme</div>
+  <div class="particles" id="particles"></div>
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i> Theme</div>
+  <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
 
   <section id="home">
     <div class="section-content">
-      <img src="https://yt3.googleusercontent.com/rgW6HKz1xBR3c5UOjbKnb_Nkj1ZROqmoLbI_yrMpoWmgy7hiNSR-0kC2ZxLZN853BjHcWyBhHAk=s160-c-k-c0x00ffffff-no-rj" alt="Logo" class="logo">
-      <h1 class="section-title">Welcome to Taimiyaxeditz</h1>
+      <img src="https://yt3.googleusercontent.com/1HgoG2h15gEBQXlIkjzx2UFFTG2Z87ozl1JN_iDjwUwU09DBGMA1CvsWpu0cFG5RANZ5QUxE5A=s160-c-k-c0x00ffffff-no-rj" alt="Logo" class="logo">
+      <h1 class="section-title">Welcome to Zenova<br>(taimiyaxeditz) </h1>
       <p>Crafting the future with code and creativity.</p>
       <div class="buttons">
         <a href="https://discord.com/user/1331632669880221708" target="_blank"><i class="fab fa-discord"></i> Discord</a>
@@ -175,14 +366,14 @@
     <div class="section-content">
       <h2 class="section-title">Skills</h2>
       <div class="skills-list">
-        <div class="skill">HTML / CSS / JS</div>
-        <div class="skill">React / Vue</div>
-        <div class="skill">Node.js / Express</div>
-        <div class="skill">MongoDB / Firebase</div>
-        <div class="skill">Photoshop / After Effects</div>
-        <div class="skill">Git / GitHub / CI-CD</div>
-        <div class="skill">APIs / REST / GraphQL</div>
-        <div class="skill">Three.js / WebGL</div>
+        <div class="skill"><i class="fab fa-html5"></i> HTML / CSS / JS</div>
+        <div class="skill"><i class="fab fa-react"></i> React / Vue</div>
+        <div class="skill"><i class="fab fa-node-js"></i> Node.js / Express</div>
+        <div class="skill"><i class="fas fa-database"></i> MongoDB / Firebase</div>
+        <div class="skill"><i class="fas fa-film"></i> Photoshop / After Effects</div>
+        <div class="skill"><i class="fab fa-git-alt"></i> Git / GitHub / CI-CD</div>
+        <div class="skill"><i class="fas fa-server"></i> APIs / REST / GraphQL</div>
+        <div class="skill"><i class="fas fa-cube"></i> Three.js / WebGL</div>
       </div>
     </div>
   </section>
@@ -191,11 +382,11 @@
     <div class="section-content">
       <h2 class="section-title">My Journey</h2>
       <div class="timeline">
-        <div class="timeline-event">2020: Started coding and editing journey</div>
-        <div class="timeline-event">2021: Built personal projects and explored APIs</div>
-        <div class="timeline-event">2022: Founded Hexa Host</div>
-        <div class="timeline-event">2022: Released Flex UI Kit, Anime API</div>
-        <div class="timeline-event">2022: Mastered full-stack, built SaaS tools</div>
+        <div class="timeline-event"><i class="fas fa-rocket"></i> 2020: Started coding and editing journey</div>
+        <div class="timeline-event"><i class="fas fa-code"></i> 2021: Built personal projects and explored APIs</div>
+        <div class="timeline-event"><i class="fas fa-server"></i> 2022: Founded Hexa Host</div>
+        <div class="timeline-event"><i class="fas fa-box-open"></i> 2022: Released Flex UI Kit, Anime API</div>
+        <div class="timeline-event"><i class="fas fa-laptop-code"></i> 2022: Mastered full-stack, built SaaS tools</div>
       </div>
     </div>
   </section>
@@ -204,11 +395,11 @@
     <div class="section-content">
       <h2 class="section-title">Fake Achievements</h2>
       <div class="achievements-list">
-        <div class="achievement">Awarded "Best Dev Under 20" by Imaginary Tech</div>
-        <div class="achievement">First to code a website on Mars (virtually)</div>
-        <div class="achievement">100K Stars on GitHub (in dreams)</div>
-        <div class="achievement">Built an AI that only writes memes</div>
-        <div class="achievement">Featured on the cover of Code Weekly (fan art edition)</div>
+        <div class="achievement"><i class="fas fa-trophy"></i> Awarded "Best Dev Under 20" by Imaginary Tech</div>
+        <div class="achievement"><i class="fas fa-globe-americas"></i> First to code a website on Mars (virtually)</div>
+        <div class="achievement"><i class="fab fa-github"></i> 100K Stars on GitHub (in dreams)</div>
+        <div class="achievement"><i class="fas fa-robot"></i> Built an AI that only writes memes</div>
+        <div class="achievement"><i class="fas fa-newspaper"></i> Featured on the cover of Code Weekly (fan art edition)</div>
       </div>
     </div>
   </section>
@@ -217,9 +408,9 @@
     <div class="section-content">
       <h2 class="section-title">Global Leaderboard</h2>
       <div class="leaderboard">
-        <div class="leaderboard-entry">#1 - Taimiyaxeditz: 99,999 XP</div>
-        <div class="leaderboard-entry">#2 - Elon Devskin: 88,888 XP</div>
-        <div class="leaderboard-entry">#3 - AI-9000: 77,777 XP</div>
+        <div class="leaderboard-entry"><i class="fas fa-crown"></i> #1 - Taimiyaxeditz: 99,999 XP</div>
+        <div class="leaderboard-entry"><i class="fas fa-medal"></i> #2 - Elon Devskin: 88,888 XP</div>
+        <div class="leaderboard-entry"><i class="fas fa-award"></i> #3 - AI-9000: 77,777 XP</div>
       </div>
     </div>
   </section>
@@ -228,9 +419,9 @@
     <div class="section-content">
       <h2 class="section-title">AI Meme Generator (Random)</h2>
       <div class="memes">
-        <div class="meme">"When the code works on first try... suspicious."</div>
-        <div class="meme">"404: Motivation Not Found"</div>
-        <div class="meme">"I write bugs faster than I fix them."</div>
+        <div class="meme"><i class="fas fa-laugh-squint"></i> "When the code works on first try... suspicious."</div>
+        <div class="meme"><i class="fas fa-search"></i> "404: Motivation Not Found"</div>
+        <div class="meme"><i class="fas fa-bug"></i> "I write bugs faster than I fix them."</div>
       </div>
     </div>
   </section>
@@ -239,11 +430,31 @@
     <div class="section-content">
       <h2 class="section-title">Projects</h2>
       <div class="projects-grid">
-        <div class="project-card"><h3>Flex UI Kit</h3><p>A responsive UI kit for modern web development.</p></div>
-        <div class="project-card"><h3>Hexa Host Panel</h3><p>Custom hosting panel built for scalability.</p></div>
-        <div class="project-card"><h3>Anime Stream API</h3><p>Metadata & anime streaming-ready API.</p></div>
-        <div class="project-card"><h3>Glitch Anim Effects</h3><p>Neon glitch animation library.</p></div>
-        <div class="project-card"><h3>CodeVerse Terminal</h3><p>CLI-style web terminal experience.</p></div>
+        <div class="project-card">
+          <i class="fas fa-paint-brush"></i>
+          <h3>Flex UI Kit</h3>
+          <p>A responsive UI kit for modern web development.</p>
+        </div>
+        <div class="project-card">
+          <i class="fas fa-server"></i>
+          <h3>Hexa Host Panel</h3>
+          <p>Custom hosting panel built for scalability.</p>
+        </div>
+        <div class="project-card">
+          <i class="fas fa-film"></i>
+          <h3>Anime Stream API</h3>
+          <p>Metadata & anime streaming-ready API.</p>
+        </div>
+        <div class="project-card">
+          <i class="fas fa-globe"></i>
+          <h3>Glitch Anim Effects</h3>
+          <p>Neon glitch animation library.</p>
+        </div>
+        <div class="project-card">
+          <i class="fas fa-terminal"></i>
+          <h3>CodeVerse Terminal</h3>
+          <p>CLI-style web terminal experience.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -255,7 +466,7 @@
         <input type="text" name="name" placeholder="Your Name" required />
         <input type="email" name="email" placeholder="Your Email" required />
         <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-        <button type="submit">Send</button>
+        <button type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
       </form>
     </div>
   </section>
@@ -270,25 +481,49 @@
   </footer>
 
   <script>
+    // Scroll progress bar
     window.onscroll = function () {
       const scrollBar = document.getElementById("scrollBar");
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       scrollBar.style.width = (winScroll / height) * 100 + "%";
+      
+      // Show/hide back to top button
+      const backToTop = document.getElementById("backToTop");
+      if (winScroll > 300) {
+        backToTop.classList.add("visible");
+      } else {
+        backToTop.classList.remove("visible");
+      }
+      
+      // Check section visibility for animations
+      checkVisibility();
     };
 
+    // Theme toggle
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute("data-theme");
-      html.setAttribute("data-theme", current === "light" ? "dark" : "light");
-      localStorage.setItem("theme", html.getAttribute("data-theme"));
+      const newTheme = current === "light" ? "dark" : "light";
+      html.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      
+      // Update theme icon
+      const themeIcon = document.querySelector('.theme-toggle i');
+      themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
     }
 
+    // Initialize theme
     (function () {
       const saved = localStorage.getItem("theme") || "dark";
       document.documentElement.setAttribute("data-theme", saved);
+      
+      // Set initial theme icon
+      const themeIcon = document.querySelector('.theme-toggle i');
+      themeIcon.className = saved === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
     })();
 
+    // Clock
     function updateClock() {
       const now = new Date();
       const clock = document.getElementById("clock");
@@ -296,6 +531,63 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // Back to top button
+    document.getElementById("backToTop").addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Check section visibility for animations
+    function checkVisibility() {
+      const sections = document.querySelectorAll('section');
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        const isVisible = (rect.top <= window.innerHeight * 0.75) && (rect.bottom >= window.innerHeight * 0.25);
+        if (isVisible) {
+          section.classList.add('visible');
+        }
+      });
+    }
+
+    // Initialize visibility check
+    document.addEventListener('DOMContentLoaded', () => {
+      checkVisibility();
+      
+      // Create floating particles
+      createParticles();
+    });
+
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 20;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 2px and 6px
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        
+        // Random animation duration between 10s and 30s
+        const duration = Math.random() * 20 + 10;
+        particle.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
   </script>
 </body>
 </html>
